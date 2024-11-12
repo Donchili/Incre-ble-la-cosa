@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>My first three.js app</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r119/three.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;  // Habilitar sombras
+        document.body.appendChild(renderer.domElement);
+
+        // Luz ambiental
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
+        scene.add(ambientLight);
+
+        // Luces puntuales
+        const redLight = new THREE.PointLight(0xff0000, 1.5, 100);
+        redLight.position.set(-10, 0, 10);
+        redLight.castShadow = true;  // Proyectar sombras
+        scene.add(redLight);
+
+        const blueLight = new THREE.PointLight(0x0000ff, 1.5, 100); 
+        blueLight.position.set(10, 0, 10);
+        blueLight.castShadow = true;  
+        scene.add(blueLight);
+
+        // Texturas
+        const loader = new THREE.TextureLoader();
+        const texture1 = loader.load('madera.jpg');
+        const texture2 = loader.load('piso.jpg');
+        const texture3 = loader.load('madera.jpg');
+        const texture4 = loader.load('madera.jpg');
+        const textureMesa = loader.load('billar.jpg');
+        const texturePatas = loader.load('bordes.png');
+        const textureBordes = loader.load('bordes.png');
+        const textureTacos = loader.load('taco.jpg'); 
+
+       
+        const material1 = new THREE.MeshPhongMaterial({ map: texture1 });
+        const material2 = new THREE.MeshPhongMaterial({ map: texture2 });
+        const material3 = new THREE.MeshPhongMaterial({ map: texture3 });
+        const material4 = new THREE.MeshPhongMaterial({ map: texture4 });
+        const materialMesa = new THREE.MeshPhongMaterial({ map: textureMesa });
+        const materialPatas = new THREE.MeshPhongMaterial({ map: texturePatas });
+        const materialBordes = new THREE.MeshPhongMaterial({ map: textureBordes });
+        const materialTacos = new THREE.MeshPhongMaterial({ map: textureTacos });
+
+        // pared traera
+        const geometry1 = new THREE.BoxGeometry(10, 5, 10);
+        const cube = new THREE.Mesh(geometry1, material1);
+        cube.position.z = -5;
+        cube.position.y = 1.4;
+        cube.castShadow = true;  // Proyectar sombras
+        cube.receiveShadow = true;  // Recibir sombras
+        scene.add(cube);
+
+        // piso
+        const geometry4 = new THREE.BoxGeometry(13.8, 5, 1);
+        const piso = new THREE.Mesh(geometry4, material2);
+        piso.position.y = -2.8;
+        piso.rotation.x = 2;
+        piso.receiveShadow = true;  
+        scene.add(piso);
+
+        // pared derecha
+        const geometry2 = new THREE.BoxGeometry(6, 8, 5);
+        const rightCube = new THREE.Mesh(geometry2, material3);
+        rightCube.position.x = 9.7;
+        rightCube.position.y = 1.5;
+        rightCube.rotation.x = 6;
+        rightCube.castShadow = true; 
+        rightCube.receiveShadow = true;  
+        scene.add(rightCube);
+
+        // pared izquierda
+        const geometry3 = new THREE.BoxGeometry(5, 8, 5);
+        const leftCube = new THREE.Mesh(geometry3, material4);
+        leftCube.position.x = -9.2;
+        leftCube.position.y = 1.5;
+        leftCube.rotation.x = 6;
+        leftCube.castShadow = true;  
+        leftCube.receiveShadow = true;  
+        scene.add(leftCube);
+
+        // Mesa 
+        const geometryMesa = new THREE.BoxGeometry(3, 0.1, 1);
+        const mesa = new THREE.Mesh(geometryMesa, materialMesa);
+        mesa.rotation.x = 0.5;
+        mesa.position.z = 3;
+        mesa.castShadow = true;  
+        mesa.receiveShadow = true;  
+        scene.add(mesa);
+
+        // Borde derecho
+        const borderRightGeometry = new THREE.BoxGeometry(0.17, 0.2, 1.1);
+        const borderRight = new THREE.Mesh(borderRightGeometry, materialBordes);
+        borderRight.rotation.x = 0.5;
+        borderRight.position.set(1.55, 0, 3);
+        borderRight.castShadow = true;  
+        borderRight.receiveShadow = true;  
+        scene.add(borderRight);
+
+        // Borde izquierdo
+        const borderLeftGeometry = new THREE.BoxGeometry(0.17, 0.2, 1.1);
+        const borderLeft = new THREE.Mesh(borderLeftGeometry, materialBordes);
+        borderLeft.rotation.x = 0.5;
+        borderLeft.position.set(-1.55, 0, 3);
+        borderLeft.castShadow = true;  
+        borderLeft.receiveShadow = true; 
+        scene.add(borderLeft);
+
+        // Borde frontal
+        const borderFrontGeometry = new THREE.BoxGeometry(2.4, 0.168, 0.1);
+        const borderFront = new THREE.Mesh(borderFrontGeometry, materialBordes);
+        borderFront.rotation.x = 0.5;
+        borderFront.position.set(0, -0.17, 3.8);
+        borderFront.castShadow = true;  
+        borderFront.receiveShadow = true; 
+        scene.add(borderFront);
+
+        // Borde trasero
+        const borderBackGeometry = new THREE.BoxGeometry(3.1, 0.2, 0.1);
+        const borderBack = new THREE.Mesh(borderBackGeometry, materialBordes);
+        borderBack.rotation.x = 0.5;
+        borderBack.position.set(0, 0.25, 2.5);
+        borderBack.castShadow = true;  
+        borderBack.receiveShadow = true;  
+        scene.add(borderBack);
+
+        // patas mesa 
+        const geometryPata = new THREE.CylinderGeometry(0.2, 0.06, 0.8, 25);
+        const pataFrontRight = new THREE.Mesh(geometryPata, materialPatas);
+        pataFrontRight.position.set(1.3, -0.70, 3.4);
+        pataFrontRight.castShadow = true;  
+        pataFrontRight.receiveShadow = true;  
+        scene.add(pataFrontRight);
+
+        const pataFrontLeft = new THREE.Mesh(geometryPata, materialPatas);
+        pataFrontLeft.position.set(-1.3, -0.70, 3.4);
+        pataFrontLeft.castShadow = true;  
+        pataFrontLeft.receiveShadow = true; 
+        scene.add(pataFrontLeft);
+
+        const pataBackRight = new THREE.Mesh(geometryPata, materialPatas);
+        pataBackRight.position.set(1.3, -0.75, 2.6);
+        pataBackRight.castShadow = true;  
+        pataBackRight.receiveShadow = true; 
+        scene.add(pataBackRight);
+
+        const pataBackLeft = new THREE.Mesh(geometryPata, materialPatas);
+        pataBackLeft.position.set(-1.3, -0.75, 2.6);
+        pataBackLeft.castShadow = true;  
+        pataBackLeft.receiveShadow = true;  
+        scene.add(pataBackLeft);
+
+        // bolas patas
+        const geometryBase = new THREE.SphereGeometry(0.1, 32, 32);
+        const materialBase = new THREE.MeshPhongMaterial({ color: 0x000000 });
+
+        const baseFrontRight = new THREE.Mesh(geometryBase, materialPatas);
+        baseFrontRight.position.set(1.3, -1.1, 3.4);
+        baseFrontRight.castShadow = true;  
+        baseFrontRight.receiveShadow = true;  
+        scene.add(baseFrontRight);
+
+        const baseFrontLeft = new THREE.Mesh(geometryBase, materialPatas);
+        baseFrontLeft.position.set(-1.3, -1.1, 3.4);
+        baseFrontLeft.castShadow = true;  
+        baseFrontLeft.receiveShadow = true;  
+        scene.add(baseFrontLeft);
+
+        const baseBackRight = new THREE.Mesh(geometryBase, materialPatas);
+        baseBackRight.position.set(1.3, -1.1, 2.6);
+        baseBackRight.castShadow = true;  
+        baseBackRight.receiveShadow = true;  
+        scene.add(baseBackRight);
+
+        const baseBackLeft = new THREE.Mesh(geometryBase, materialPatas);
+        baseBackLeft.position.set(-1.3, -1.1, 2.6);
+        baseBackLeft.castShadow = true;  
+        baseBackLeft.receiveShadow = true;  
+        scene.add(baseBackLeft);
+
+        // bolas
+        const geometryBola = new THREE.SphereGeometry(0.06, 10, 10);
+        const materialBola1 = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+        const materialBola2 = new THREE.MeshPhongMaterial({ color: 0xfffffff });
+        const materialBola3 = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+
+        const bola1 = new THREE.Mesh(geometryBola, materialBola1);
+        bola1.position.set(-0.5, 0.12, 3);
+        bola1.castShadow = true;  
+        bola1.receiveShadow = true;  
+        scene.add(bola1);
+
+        const bola2 = new THREE.Mesh(geometryBola, materialBola2);
+        bola2.position.set(0.5, 0.25, 2.8);
+        bola2.castShadow = true;  
+        bola2.receiveShadow = true;  
+        scene.add(bola2);
+
+        const bola3 = new THREE.Mesh(geometryBola, materialBola3);
+        bola3.position.set(0, 0, 3.2);
+        bola3.castShadow = true;  
+        bola3.receiveShadow = true; 
+        scene.add(bola3);
+
+        // Tacos
+        const cylinderGeometry = new THREE.CylinderGeometry(0.05, 0.01, 1, 10);
+        const cylinder1 = new THREE.Mesh(cylinderGeometry, materialTacos);
+        cylinder1.position.set(-0.5, 0.9, 3);
+        cylinder1.castShadow = true;  
+        cylinder1.receiveShadow = true;  
+        scene.add(cylinder1);
+
+        const cylinder2 = new THREE.Mesh(cylinderGeometry, materialTacos);
+        cylinder2.position.set(-0.2, 0.9, 3);
+        cylinder2.castShadow = true;  
+        cylinder2.receiveShadow = true;  
+        scene.add(cylinder2);
+
+        const cylinder3 = new THREE.Mesh(cylinderGeometry, materialTacos);
+        cylinder3.position.set(0.1, 0.9, 3);
+        cylinder3.castShadow = true;  
+        cylinder3.receiveShadow = true; 
+        scene.add(cylinder3);
+
+        const cylinder4 = new THREE.Mesh(cylinderGeometry, materialTacos);
+        cylinder4.position.set(0.4, 0.9, 3);
+        cylinder4.castShadow = true;  
+        cylinder4.receiveShadow = true; 
+        scene.add(cylinder4);
+
+        // madera tacos
+        const geometryCuboBordes = new THREE.BoxGeometry(1.5, 0.1, 0.2); 
+        const cuboBordes = new THREE.Mesh(geometryCuboBordes, materialBordes);
+        cuboBordes.position.set(-0.05, 1.2, 3);
+        cuboBordes.castShadow = true;  
+        cuboBordes.receiveShadow = true;  
+        scene.add(cuboBordes);
+        
+
+        camera.position.z = 5;
+
+        function animate() {
+            renderer.render(scene, camera);
+        }
+        
+        renderer.setAnimationLoop(animate);
+    </script>
+</body>
+
+</html>
